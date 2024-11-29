@@ -1,10 +1,5 @@
-import 'package:expenz/screens/main_screen.dart';
-import 'package:expenz/services/user_details_service.dart';
-import 'package:expenz/utils/colors.dart';
-
-import 'package:expenz/widgets/custum_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_application_1/screens/main_screen.dart';
+
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/constants.dart';
 import 'package:flutter_application_1/widgets/custum_button.dart';
@@ -32,6 +27,7 @@ class _UserDataScreenState extends State<UserDataScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // to scroll the page
       body: SingleChildScrollView(
         child: SafeArea(
           child: Padding(
@@ -54,6 +50,7 @@ class _UserDataScreenState extends State<UserDataScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      //form feild for the name
                       TextFormField(
                         controller: _usernameController,
                         validator: (value) {
@@ -163,36 +160,6 @@ class _UserDataScreenState extends State<UserDataScreen> {
                             ),
                           )
                         ],
-                      ),
-                      const SizedBox(
-                        height: 30,
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          if (_formKey.currentState!.validate()) {
-                            // Form is valid, process data
-                            String username = _usernameController.text;
-                            String email = _emailController.text;
-                            String password = _passwordContorller.text;
-                            String confirmPassword =
-                                _confirmPasswordContorller.text;
-                            //store the user details in shared preferences
-                            await UserService.storeUserDetails(username, email,
-                                password, confirmPassword, context);
-
-                            //Navigate to the Home screen
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MainScreen(),
-                              ),
-                            );
-                          }
-                        },
-                        child: const CustumButton(
-                          buttonName: "Next",
-                          buttonColor: kMainColor,
-                        ),
                       ),
                     ],
                   ),

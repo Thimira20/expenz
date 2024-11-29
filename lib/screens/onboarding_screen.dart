@@ -31,6 +31,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                 PageView(
                   controller: _controller,
                   onPageChanged: (index) {
+                    //to get  current page index
                     setState(() {
                       showHomePage = index == 3;
                     });
@@ -78,7 +79,9 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 30),
                     child: !showHomePage
+                        //container can't detect gestures so we use gesture detector
                         ? GestureDetector(
+                            //when clicked it will go to next page
                             onTap: () {
                               _controller.animateToPage(
                                 _controller.page!.toInt() + 1,
