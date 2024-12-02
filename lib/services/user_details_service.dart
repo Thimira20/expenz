@@ -46,7 +46,7 @@ class UserService {
   static Future<bool> checkUsername() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? username = prefs.getString('username');
-    return username != null;
+    return username != null; //return true if username is not null
   }
 
   //remove the username and email from shared preferences
