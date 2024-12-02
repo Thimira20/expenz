@@ -30,6 +30,7 @@ class MyApp extends StatelessWidget {
     return FutureBuilder(
         future: UserService.checkUsername(),
         builder: (context, snapshot) {
+          //build the app
           if (snapshot.connectionState == ConnectionState.waiting) {
             //wait for the future to complete
             return const CircularProgressIndicator();
