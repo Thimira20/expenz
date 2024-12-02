@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/screens/main_screen.dart';
+import 'package:flutter_application_1/services/user_details_service.dart';
 
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/constants.dart';
@@ -23,6 +25,15 @@ class _UserDataScreenState extends State<UserDataScreen> {
       TextEditingController();
 
   bool _rememberMe = false;
+  @override
+  void dispose() {
+    //to dispose the controllers
+    _usernameController.dispose();
+    _emailController.dispose();
+    _passwordContorller.dispose();
+    _confirmPasswordContorller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +57,13 @@ class _UserDataScreenState extends State<UserDataScreen> {
                   height: 30,
                 ),
                 Form(
-                  key: _formKey,
+                  key: _formKey, //for the form validation
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //form feild for the name
                       TextFormField(
-                        controller: _usernameController,
+                        controller: _usernameController, //to save the state
                         validator: (value) {
                           //check weather the username is entered
                           if (value!.isEmpty) {
@@ -96,7 +107,8 @@ class _UserDataScreenState extends State<UserDataScreen> {
                       ),
                       TextFormField(
                         controller: _passwordContorller,
-                        obscureText: true,
+
+                        obscureText: true, //to hide the password
                         validator: (value) {
                           if (value!.isEmpty) {
                             return "Please Enter A Valid Password";
@@ -160,6 +172,41 @@ class _UserDataScreenState extends State<UserDataScreen> {
                             ),
                           )
                         ],
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      GestureDetector(
+                        //to navigate to the next screen
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            //to validate the form
+                            // Form is valid, process data
+                            String username = _usernameController.text;
+                            String email = _emailController.text;
+                            String password = _passwordContorller.text;
+                            String confirmPassword =
+                                _confirmPasswordContorller.text;
+                            //store the user details in shared preferences
+                            await UserService.storeUserDetails(username, email,
+                                password, confirmPassword, context);
+
+                            //Navigate to the Home screen
+                            if (context.mounted) {
+                              //to check if the context is mounted
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MainScreen(),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        child: const CustumButton(
+                          buttonName: "Next",
+                          buttonColor: kMainColor,
+                        ),
                       ),
                     ],
                   ),
