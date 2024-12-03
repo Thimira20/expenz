@@ -58,7 +58,9 @@ final class Income {
   }
 
   // Create an Expense object from a JSON object
+  //factory constructor
   factory Income.fromJson(Map<String, dynamic> json) {
+    //an existing instance from a memory instead of creating a new one
     return Income(
       id: json['id'],
       title: json['title'],

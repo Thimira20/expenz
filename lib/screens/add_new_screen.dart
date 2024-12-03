@@ -9,13 +9,13 @@ import 'package:flutter_application_1/widgets/custum_button.dart';
 import 'package:intl/intl.dart';
 
 class AddNewScreen extends StatefulWidget {
-  // final Function(Expense) addExpense;
-  // final Function(Income) addIcome;
-  // const AddNewScreen({
-  //   super.key,
-  //   required this.addExpense,
-  //   required this.addIcome,
-  // });
+  final Function(Expense) addExpense;
+  final Function(Income) addIcome;
+  const AddNewScreen({
+    super.key,
+    required this.addExpense,
+    required this.addIcome,
+  });
 
   @override
   State<AddNewScreen> createState() => _AddNewScreenState();
@@ -468,7 +468,7 @@ class _AddNewScreenState extends State<AddNewScreen> {
 
                                   //add expense to the list
 
-                                  // widget.addExpense(expense);
+                                  widget.addExpense(expense);
 
                                   //clear text fields
                                   _titleController.clear();
@@ -492,7 +492,7 @@ class _AddNewScreenState extends State<AddNewScreen> {
                                   );
 
                                   //add income to the list
-                                  // widget.addIcome(income);
+                                  widget.addIcome(income);
 
                                   //clear text fields
                                   _titleController.clear();

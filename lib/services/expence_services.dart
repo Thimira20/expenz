@@ -11,7 +11,20 @@ class ExpenceService {
   static const String _expensesKey = 'expenses';
 
   //Save the expense to shared preferences
+  /// Saves an expense to the shared preferences.
+  ///
+  /// This method retrieves the existing list of expenses from the shared
+  /// preferences, adds the new expense to this list, and then saves the
+  /// updated list back to the shared preferences. A snackbar is displayed
+  /// to indicate that the expense was added successfully.
+  ///
+  /// Parameters:
+  /// - `expense`: The `Expense` object to be saved.
+  /// - `context`: The `BuildContext` used to display the snackbar.
+  ///
+  /// Returns a `Future<void>` that completes when the operation is finished.
   Future<void> saveExpense(Expense expense, BuildContext context) async {
+    //
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       List<String>? existingExpenses = prefs.getStringList(_expensesKey);
@@ -35,18 +48,24 @@ class ExpenceService {
       await prefs.setStringList(_expensesKey, updatedExpenses);
 
       //show snackbar
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Expense added successfully'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Expense added successfully'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     } catch (e) {
       print(e.toString());
     }
   }
 
   //Load the expenses from shared preferences
+  /// Loads the list of expenses from shared preferences.
+  ///
+  /// Returns a `Future` that resolves to a list of `Expense` objects, which are
+  /// loaded from the shared preferences store.
   Future<List<Expense>> loadExpenses() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String>? existingExpenses = prefs.getStringList(_expensesKey);
@@ -88,12 +107,14 @@ class ExpenceService {
       await prefs.setStringList(_expensesKey, updatedExpenses);
 
       //show snackbar
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Expense deleted successfully'),
-          duration: Duration(seconds: 2),
-        ),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Expense deleted successfully'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
     } catch (e) {
       print(e.toString());
     }

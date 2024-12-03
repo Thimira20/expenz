@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/models/expence_model.dart';
+import 'package:flutter_application_1/models/income_model.dart';
 import 'package:flutter_application_1/screens/add_new_screen.dart';
 import 'package:flutter_application_1/screens/budget_screen.dart';
 import 'package:flutter_application_1/screens/home_screen.dart';
 import 'package:flutter_application_1/screens/profile_screen.dart';
 import 'package:flutter_application_1/screens/transaction_screen.dart';
+import 'package:flutter_application_1/services/expence_services.dart';
+import 'package:flutter_application_1/services/income_services.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 
 class MainScreen extends StatefulWidget {
@@ -20,12 +24,101 @@ class _MainScreenState extends State<MainScreen> {
 
   // Define the list of incomes
   int _currentPageIndex = 0;
+  List<Expense> expensesList = [];
+  List<Income> incomesList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    // Fetch all the expenses when the widget is first initialized
+    setState(() {
+      fetchExpenses();
+      fetchIncomes();
+    });
+  }
+
+  // Function to fetch expenses
+  void fetchExpenses() async {
+    // Load expenses from shared preferences
+    List<Expense> loadedExpenses = await ExpenceService().loadExpenses();
+
+    // Update expensesList with the fetched expenses
+    setState(() {
+      expensesList = loadedExpenses;
+    });
+  }
+
+  // Function to add a new expense
+  void addNewExpense(Expense newExpense) {
+    // Save the new expense to shared preferences
+    ExpenceService().saveExpense(newExpense, context);
+
+    // Update the list of expenses
+    setState(() {
+      expensesList.add(newExpense);
+    });
+  }
+
+  // Function to delete an expense
+  void deleteExpense(Expense expense) {
+    // Delete the expense from shared preferences
+    ExpenceService().deleteExpense(expense.id, context);
+
+    // Update the list of expenses
+    setState(() {
+      expensesList.remove(expense);
+    });
+  }
+
+  //fetch incomes
+  void fetchIncomes() async {
+    // Load incomes from shared preferences
+    List<Income> loadedIncomes = await IncomeServices().loadIncomes();
+
+    // Update incomesList with the fetched incomes
+    setState(() {
+      incomesList = loadedIncomes;
+    });
+  }
+
+  //Function to add new income
+  void addNewIncome(Income newIncome) {
+    // Save the new income to shared preferences
+    IncomeServices().saveIncome(newIncome, context);
+
+    // Update the list of incomes
+    setState(() {
+      incomesList.add(newIncome);
+    });
+  }
+
+  // Function to delete an income
+  void deleteIncome(Income income) {
+    // Delete the income from shared preferences
+    IncomeServices().deleteIncome(income.id, context);
+
+    // Update the list of incomes
+    setState(() {
+      incomesList.remove(income);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> pages = [
-      HomeScreen(),
-      TransactionScreen(),
-      AddNewScreen(),
+      HomeScreen(
+          //expensesList: expensesList,
+          ),
+      TransactionsScreen(
+        expensesList: expensesList,
+        onDismissedExpenses: deleteExpense,
+        incomeList: incomesList,
+        onDismissedIncome: deleteIncome,
+      ),
+      AddNewScreen(
+        addExpense: addNewExpense,
+        addIcome: addNewIncome,
+      ),
       BudgetScreen(),
       ProfileScreen(),
     ];

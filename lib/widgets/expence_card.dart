@@ -8,7 +8,7 @@ class ExpenceCard extends StatelessWidget {
   final String title;
   final DateTime date;
   final double amount;
-  final ExpensiveAndroidViewController category;
+  final ExpenseCategory category;
   final String description;
   final DateTime createdAt;
 
