@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/models/expence_model.dart';
+import 'package:flutter_application_1/models/income_model.dart';
 import 'package:flutter_application_1/services/user_details_service.dart';
 import 'package:flutter_application_1/utils/colors.dart';
 import 'package:flutter_application_1/utils/constants.dart';
 import 'package:flutter_application_1/widgets/expence_card.dart';
 import 'package:flutter_application_1/widgets/income_exp_chip.dart';
+import 'package:flutter_application_1/widgets/line_chart.dart';
 
 class HomeScreen extends StatefulWidget {
-  // final List<Expense> expensesList;
-  // const HomeScreen({
-  //   super.key,
-  //   required this.expensesList,
-  // });
+  final List<Expense> expensesList;
+  final List<Income> incomesList;
+  const HomeScreen({
+    super.key,
+    required this.expensesList,
+    required this.incomesList,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -21,6 +25,8 @@ class _HomeScreenState extends State<HomeScreen> {
   //to store the username and email
   String username = "";
   String email = "";
+  double expenseTotal = 0;
+  double incomeTotal = 0;
 
   @override
   //state life  cycle method
@@ -37,6 +43,16 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       }
     });
+
+    setState(() {
+      for (var i = 0; i < widget.expensesList.length; i++) {
+        expenseTotal += widget.expensesList[i].amount;
+      }
+      for (var k = 0; k < widget.incomesList.length; k++) {
+        incomeTotal += widget.incomesList[k].amount;
+      }
+    });
+
     super.initState();
   }
 
@@ -109,18 +125,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       const SizedBox(
                         height: 20,
                       ),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           IncomeExpenceChip(
                             title: "Income",
-                            amount: 5000,
+                            amount: incomeTotal,
                             bgColor: kGreen,
                             imageUrl: "assets/images/income.png",
                           ),
                           IncomeExpenceChip(
                             title: "Expense",
-                            amount: 1200,
+                            amount: expenseTotal,
                             bgColor: kRed,
                             imageUrl: "assets/images/expense.png",
                           )
@@ -151,63 +167,63 @@ class _HomeScreenState extends State<HomeScreen> {
 
                     //chart to show the spend frequency and the amount spent in a chart using fl_chart
 
-                    // LineChartSample()
+                    LineChartSample()
                   ],
                 ),
               ),
 
               //recent transactions
-              // Padding(
-              //   padding:
-              //       const EdgeInsets.symmetric(horizontal: kDefalutPadding),
-              //   child: Column(
-              //     crossAxisAlignment: CrossAxisAlignment.start,
-              //     children: [
-              //       const Text(
-              //         "Recent Transactions",
-              //         style: TextStyle(
-              //           fontSize: 18,
-              //           fontWeight: FontWeight.w500,
-              //         ),
-              //       ),
-              //       const SizedBox(
-              //         height: 20,
-              //       ),
-              //       //show the recent transactions
-              //       Column(
-              //         // Wrap with Column to ensure proper layout
-              //         children: [
-              //           widget.expensesList.isEmpty
-              //               ? const Text(
-              //                   "No expenses added yet, add some expenses to see here",
-              //                   style: TextStyle(
-              //                     fontSize: 16,
-              //                     color: kGrey,
-              //                   ),
-              //                 )
-              //               : ListView.builder(
-              //                   shrinkWrap:
-              //                       true, // Set shrinkWrap to true to allow the ListView to adapt to its content size
-              //                   scrollDirection: Axis.vertical,
-              //                   physics: const NeverScrollableScrollPhysics(),
-              //                   itemCount: widget.expensesList.length,
-              //                   itemBuilder: (context, index) {
-              //                     final expense = widget.expensesList[index];
-              //                     return ExpenceCard(
-              //                       title: expense.title,
-              //                       date: expense.date,
-              //                       amount: expense.amount,
-              //                       category: expense.category,
-              //                       description: expense.description,
-              //                       createdAt: expense.time,
-              //                     );
-              //                   },
-              //                 ),
-              //         ],
-              //       ),
-              //     ],
-              //   ),
-              // ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: kDefalutPadding),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Recent Transactions",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    //show the recent transactions
+                    Column(
+                      // Wrap with Column to ensure proper layout
+                      children: [
+                        widget.expensesList.isEmpty
+                            ? const Text(
+                                "No expenses added yet, add some expenses to see here",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: kGrey,
+                                ),
+                              )
+                            : ListView.builder(
+                                shrinkWrap:
+                                    true, // Set shrinkWrap to true to allow the ListView to adapt to its content size
+                                scrollDirection: Axis.vertical,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemCount: widget.expensesList.length,
+                                itemBuilder: (context, index) {
+                                  final expense = widget.expensesList[index];
+                                  return ExpenceCard(
+                                    title: expense.title,
+                                    date: expense.date,
+                                    amount: expense.amount,
+                                    category: expense.category,
+                                    description: expense.description,
+                                    createdAt: expense.time,
+                                  );
+                                },
+                              ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),

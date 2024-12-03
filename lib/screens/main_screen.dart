@@ -25,6 +25,47 @@ class _MainScreenState extends State<MainScreen> {
   // Define the list of incomes
   int _currentPageIndex = 0;
   List<Expense> expensesList = [];
+  //category total expenses
+  Map<ExpenseCategory, double> calculateExpensesCategories() {
+    Map<ExpenseCategory, double> categoryTotals = {
+      ExpenseCategory.food: 0,
+      ExpenseCategory.transport: 0,
+      ExpenseCategory.shopping: 0,
+      ExpenseCategory.health: 0,
+      ExpenseCategory.subscription: 0,
+    };
+
+    for (Expense expense in expensesList) {
+      categoryTotals[expense.category] =
+          categoryTotals[expense.category]! + expense.amount;
+    }
+
+    //print the food category total
+    // print(categoryTotals[ExpenseCategory.health].runtimeType);
+
+    return categoryTotals;
+  }
+
+  //category total income
+  Map<IncomeCategory, double> calculateIncomeCategories() {
+    Map<IncomeCategory, double> categoryTotals = {
+      IncomeCategory.salary: 0,
+      IncomeCategory.freelance: 0,
+      IncomeCategory.passive: 0,
+      IncomeCategory.sales: 0,
+    };
+
+    for (Income income in incomesList) {
+      categoryTotals[income.category] =
+          categoryTotals[income.category]! + income.amount;
+    }
+
+    //print the food category total
+    // print(categoryTotals[IncomeCategory.salary].runtimeType);
+
+    return categoryTotals;
+  }
+
   List<Income> incomesList = [];
 
   @override
@@ -107,8 +148,9 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final List<Widget> pages = [
       HomeScreen(
-          //expensesList: expensesList,
-          ),
+        expensesList: expensesList,
+        incomesList: incomesList,
+      ),
       TransactionsScreen(
         expensesList: expensesList,
         onDismissedExpenses: deleteExpense,
@@ -119,7 +161,10 @@ class _MainScreenState extends State<MainScreen> {
         addExpense: addNewExpense,
         addIcome: addNewIncome,
       ),
-      BudgetScreen(),
+      BudgetScreen(
+        expenseCategoryTotals: calculateExpensesCategories(),
+        incomeCategoryTotals: calculateIncomeCategories(),
+      ),
       ProfileScreen(),
     ];
     return Scaffold(
